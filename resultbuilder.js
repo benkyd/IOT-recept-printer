@@ -13,6 +13,8 @@ module.exports.genCompilerSettings = function(obj) {
         let align = line.align.toUpperCase().split('')[0];
         let size = line.size.toUpperCase().split('')[0];;
 
+        // if (align.indexOf) {}
+
         arguments.push(align);
         arguments.push(size);
         arguments.push(line.content);

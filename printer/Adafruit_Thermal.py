@@ -12,7 +12,7 @@ class Adafruit_Thermal(Serial):
 	prevByte        =  '\n'
 	column          =     0
 	maxColumn       =    32
-	charHeight      =    24
+	charHeight      =   120
 	lineSpacing     =     8
 	barcodeHeight   =    50
 	printMode       =     0
