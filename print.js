@@ -1,8 +1,34 @@
 const PythonShell = require('python-shell');
-const Result = require('./resultbuilder'); 
 const WeatherAPI = require('./weatherAPI');
+const Result = require('./resultbuilder'); 
+const Helper = require('./helper');
 
-module.exports.print = async function(name, coords) {
+let printQueue = [];
+let printing = false;
+
+module.exports.getprintqueue = function() {
+    return printQueue;
+}
+
+module.exports.setprintqueue = function(tmp) {
+    printQueue = tmp;
+}
+
+module.exports.printing = function() {
+    return printing;
+}
+
+module.exports.print = async function() {
+    printing = true;
+    while (printQueue.length > 0) {
+        await currentprint(printQueue[0].name, printQueue[0].coords);
+        await Helper.sleep(200);
+        printQueue.splice(0, 1);
+    }
+    printing = false;
+}
+
+async function currentprint(name, coords) {
     let text = Result.genCompilerSettings({
         padding: 2,
         lineBreaks: 1,
@@ -29,7 +55,11 @@ module.exports.print = async function(name, coords) {
             }
         ]
     });
-    PythonShell.run('printer/write.py', text, function (err, results) {
-        if (err) throw err;
-    });
+    try {
+        await PythonShell.run('printer/write.py', text, function (err, results) {
+            if (err) {
+                console.log('Could not open serial connection for ' + name + '\'s print');
+            }
+        });
+    } catch (err) {}
 }

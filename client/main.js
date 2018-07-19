@@ -8,6 +8,10 @@ async function print() {
     }
 
     let http = new XMLHttpRequest();
+    http.onreadystatechange = function() {
+        let response = this.responseText;
+        document.getElementById('response').innerHTML = 'Server responded with: ' + response;
+    }
     
     let string = '/print?name=' + name + '&coords=' + coords;
     await http.open('GET', string, true);
