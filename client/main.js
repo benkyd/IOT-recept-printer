@@ -19,4 +19,5 @@ async function print() {
 
     document.getElementById('coords').value = '';
     document.getElementById('name').value = '';
+    document.getElementById('response').innerHTML = 'Printing...'
 }

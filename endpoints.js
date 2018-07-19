@@ -21,7 +21,7 @@ app.get('/', function (req, res) {
 }); 
 
 app.get('/print', async function (req, res) {
-    let rate = await rateLimit();
+    let rate = await rateLimit(req, res);
     if (rate == -1) return;
 
     let inname = req.query.name;
@@ -31,17 +31,18 @@ app.get('/print', async function (req, res) {
     let set = Printer.getprintqueue();
     set.push({
         name: inname, 
-        coords: incoords
+        coords: incoords,
+        req: req,
+        res: res
     });
     Printer.setprintqueue(set);
     if (!Printer.printing()) Printer.print();
-    res.end('200 OK');
 });
 
 let requests = [];
-async function rateLimit() {
+async function rateLimit(req, res) {
     if (requests.indexOf(req.connection.remoteAddress) != -1) {
-        res.end('400 BAD REQUEST: TO MANY REQUESTS');
+        res.end('429 TO MANY REQUESTS');
         await Helper.sleep('3000');
     
         while (requests.indexOf(req.connection.remoteAddress) != -1) {

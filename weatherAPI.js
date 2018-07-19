@@ -11,9 +11,13 @@ module.exports.getWeather = async function(mode, coords) {
         res = await req.send();
     } catch (e) {  }
 
-    if (mode == 1) {
-        return res.body.currently.summary;
-    } else if (mode == 2) {
-        return res.body.hourly.summary;
+    try {
+        if (mode == 1) {
+            return res.body.currently.summary;
+        } else if (mode == 2) {
+            return res.body.hourly.summary;
+        }
+    } catch (e) {
+        return -1;
     }
 }
