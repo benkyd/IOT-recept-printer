@@ -31,7 +31,10 @@ module.exports.print = async function() {
 async function currentprint(name, coords, req, res) {
     let currentWeather = await WeatherAPI.getWeather(1, coords);
     let todaysForcast = await WeatherAPI.getWeather(2, coords);
-    if (currentWeather == -1 || todaysForcast == -1) res.end('400 BAD REQUEST: INVALID COORDINATES');
+    if (currentWeather == -1 || todaysForcast == -1) {
+        res.end('400 BAD REQUEST: INVALID COORDINATES');
+        return;
+    }
 
     let text = Result.genCompilerSettings({
         padding: 2,
